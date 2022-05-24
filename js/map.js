@@ -1,7 +1,7 @@
 const defaultCenter = [42, 64]
 const defaultZoom = 8
 
-const cad_num = location.search.split('district=')[1]
+const cad_num = location.search.split('regions=')[1]
 
 const map = L.map('map').setView(defaultCenter, defaultZoom);
 
@@ -11,11 +11,11 @@ const osm = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Wo
 osm.addTo(map)
 
 
-const districts = district_data['features']
+const regions = regions_data['features']
 
 
-const findDistrict = districts.find(d => {
-  return d['properties']['kadastr'] == cad_num
+const findRegions = regions.find(d => {
+  return d['properties']['cadastr_num'] == cad_num
 })
 
 var zoom_info = 0
@@ -25,8 +25,8 @@ var zoom_info = 0
 ////    console.log(zoom_info)
 //})
 
-if (!cad_num || !findDistrict ) {
-    const alL_district = L.geoJSON(district_data, {
+if (!cad_num || !findRegions ) {
+    const alL_regions = L.geoJSON(regions, {
       style: districtStyle,
       onEachFeature: (feature, layer) =>{
             map.on("zoom", (e) =>{
@@ -43,18 +43,41 @@ if (!cad_num || !findDistrict ) {
 
 
 
-    alL_district.addTo(map)
-    map.fitBounds(alL_district.getBounds())
+    alL_regions.addTo(map)
+    map.fitBounds(alL_regions.getBounds())
 } else {
-    const districtLayer = L.geoJSON(findDistrict, {
+    const regionsLayer = L.geoJSON(findRegions, {
       style: districtStyle
     })
-    districtLayer.addTo(map).bindTooltip(findDistrict['properties']['name'],
+    regionsLayer.addTo(map).bindTooltip(findRegions['properties']['name'],
       { permanent: true, direction: "center", className: "my-labels" }
     ).openTooltip()
-    map.fitBounds(districtLayer.getBounds())
+    map.fitBounds(regionsLayer.getBounds())
 
 }
+
+map.spin(true)
+
+$.ajax({
+    url: 'https://api.agro.uz/gis_bridge/eijara?prefix='+cad_num,
+    dataType: "json"
+}).always(response => {
+    L.geoJSON(response).addTo(map)
+          map.spin(false);
+})
+
+//setTimeout(function () {
+//       fetch('https://api.agro.uz/gis_bridge/eijara?prefix='+cad_num)
+//            .then(res => res.json())
+//            .then(data =>{
+//                L.geoJSON(data).addTo(map)
+//                console.log(cad_num)
+//            })
+//
+//          map.spin(false);
+//      }, 10000);
+
+
 
 
 
