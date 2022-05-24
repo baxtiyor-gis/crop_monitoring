@@ -1,7 +1,7 @@
 const defaultCenter = [42, 64]
 const defaultZoom = 8
 
-const cad_num = location.search.split('regions=')[1]
+const cad_num = location.search.split('districts=')[1]
 
 const map = L.map('map').setView(defaultCenter, defaultZoom);
 
@@ -10,72 +10,105 @@ const osm = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Wo
 })
 osm.addTo(map)
 
+const district = districts_data['features']
 
-const regions = regions_data['features']
-
-
-const findRegions = regions.find(d => {
+const findDistricts = district.find(d => {
   return d['properties']['cadastr_num'] == cad_num
 })
 
 var zoom_info = 0
 
-//map.on("zoom", (e) =>{
-//    zoom_info = map.getZoom()
-////    console.log(zoom_info)
-//})
-
-if (!cad_num || !findRegions ) {
-    const alL_regions = L.geoJSON(regions, {
+let farmers = null
+if (!cad_num || !findDistricts ) {
+    const all_districts = L.geoJSON(districts, {
       style: districtStyle,
       onEachFeature: (feature, layer) =>{
-            map.on("zoom", (e) =>{
-                zoom_info = map.getZoom()
-                console.log(zoom_info)
-                if(zoom_info > 10){
-                     layer.bindTooltip(feature['properties']['name'], { permanent: true, direction: "center", className: "my-labels" }).openTooltip()
+//             layer.bindTooltip(feature['properties']['name'], { permanent: true, direction: "center", className: "my-labels" }).openTooltip()
+        }
+     })
+    all_districts.addTo(map)
+    map.fitBounds(all_districts.getBounds())
 
-                    }
-        })
-      }
-    })
-
-
-
-
-    alL_regions.addTo(map)
-    map.fitBounds(alL_regions.getBounds())
 } else {
-    const regionsLayer = L.geoJSON(findRegions, {
-      style: districtStyle
+    const districtsLayer = L.geoJSON(findDistricts, {
+      style: districtStyle,
+
     })
-    regionsLayer.addTo(map).bindTooltip(findRegions['properties']['name'],
+    districtsLayer.addTo(map).bindTooltip(findDistricts['properties']['name'],
       { permanent: true, direction: "center", className: "my-labels" }
     ).openTooltip()
-    map.fitBounds(regionsLayer.getBounds())
+    map.fitBounds(districtsLayer.getBounds())
+    map.spin(true)
 
+    $.ajax({
+        url: 'https://api.agro.uz/gis_bridge/eijara?prefix='+cad_num,
+        dataType: "json"
+    }).always(response => {
+        farmers = L.geoJSON(response, {
+            style: farmerStyle,
+            onEachFeature: function (feature, layer) {
+                layer.on({
+                    mouseover: highlightFeature,
+                    mouseout: resetHighlight,
+                    click: zoomToFeature
+                });
+
+                var popupContent = '<table>';
+                for (var p in feature.properties) {
+                    popupContent += '<tr><td>' + p + '</td><td>'+ feature.properties[p] + '</td></tr>';
+                    }
+                popupContent += '</table>';
+                layer.bindPopup(popupContent);
+   }
+        })
+        farmers.addTo(map)
+        console.log(response[0]['features'].length)
+
+        map.spin(false)
+    })
 }
 
-map.spin(true)
+function resetHighlight(e) {
+    farmers.resetStyle(e.target);
+}
 
-$.ajax({
-    url: 'https://api.agro.uz/gis_bridge/eijara?prefix='+cad_num,
-    dataType: "json"
-}).always(response => {
-    L.geoJSON(response).addTo(map)
-          map.spin(false);
-})
 
-//setTimeout(function () {
-//       fetch('https://api.agro.uz/gis_bridge/eijara?prefix='+cad_num)
-//            .then(res => res.json())
-//            .then(data =>{
-//                L.geoJSON(data).addTo(map)
-//                console.log(cad_num)
-//            })
-//
-//          map.spin(false);
-//      }, 10000);
+function highlightFeature(e) {
+    var layer = e.target;
+
+    layer.setStyle({
+        weight: 5,
+        color: 'blue',
+        dashArray: '',
+        fillOpacity: 0.7
+    });
+
+    if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
+        layer.bringToFront();
+    }
+}
+
+function zoomToFeature(e) {
+    var layer = e.target;
+
+    layer.setStyle({
+        weight: 5,
+        color: 'blue',
+        dashArray: '',
+        fillOpacity: 0.7
+    });
+
+    map.fitBounds(e.target.getBounds());
+}
+map.on('popupopen', function(centerMarker) {
+    var cM = map.project(centerMarker.popup._latlng);
+    cM.y -= centerMarker.popup._container.clientHeight/2
+    map.setView(map.unproject(cM),16, {animate: true});
+});
+
+
+
+
 
 
 
