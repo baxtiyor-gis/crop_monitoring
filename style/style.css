@@ -1,0 +1,12 @@
+#map {
+    height: 90vh;
+}
+
+.leaflet-tooltip.my-labels {
+    background-color: transparent;
+    border: transparent;
+    box-shadow: none;
+    color: red;
+    font-weight: bold;
+    font-size: 16px;
+}
