@@ -1,7 +1,10 @@
 const defaultCenter = [42, 64]
 const defaultZoom = 8
 
-const cad_num = location.search.split('districts=')[1]
+let cad_num = location.search.split('districts=')[1]
+if(!cad_num){
+    cad_num = "17:10"
+}
 
 const map = L.map('map').setView(defaultCenter, defaultZoom);
 
