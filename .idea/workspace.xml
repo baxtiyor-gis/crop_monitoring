@@ -1,16 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="ecd2c042-8ec5-45cc-b479-756b3d534f38" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/js/geojson-vt.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/js/leaflet-geojson-vt.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/js/map.js" beforeDir="false" afterPath="$PROJECT_DIR$/js/map.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/js/style.js" beforeDir="false" afterPath="$PROJECT_DIR$/js/style.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/style/style.css" beforeDir="false" afterPath="$PROJECT_DIR$/style/style.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tuman.js" beforeDir="false" afterPath="$PROJECT_DIR$/tuman.js" afterDir="false" />
-    </list>
+    <list default="true" id="ecd2c042-8ec5-45cc-b479-756b3d534f38" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
