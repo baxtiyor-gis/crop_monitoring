@@ -32,10 +32,10 @@ function farmColor(d){
         return "blue"
     }
     if (d == 'bu_type_land_dehkan_auction') {
-        return "green"
+        return "yellow"
     }
     if (d == 'bu_type_agricultural_enterprises') {
-        return "yellow"
+        return "green"
     }
     if (d == 'bu_type_land_private') {
         return "green"

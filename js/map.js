@@ -143,10 +143,10 @@ legend.onAdd = function (map) {
               <span style="padding:0 15px; border:1px solid red; margin: 0 5px"></span> Dehqon xo'jaligi
         </div>
         <div class="legent_item">
-              <span style="padding:0 15px; border:1px solid green; margin: 0 5px"></span> Dehqon xo'jaligi (auksion)
+              <span style="padding:0 15px; border:1px solid yellow; margin: 0 5px"></span> Dehqon xo'jaligi (auksion)
         </div>
         <div class="legent_item">
-              <span style="padding:0 15px; border:1px solid yellow; margin: 0 5px"></span> Korxonalarning qishloq xo‘jaligi yerlari
+              <span style="padding:0 15px; border:1px solid green; margin: 0 5px"></span> Korxonalarning qishloq xo‘jaligi yerlari
         </div>
     `
 
